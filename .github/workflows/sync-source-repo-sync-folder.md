@@ -1,6 +1,6 @@
 ---
-name: Sync /sync and /target-folder
-description: Sync /sync and /target-folder from jonorgdev/jon-source-repo@main into this repository.
+name: Sync /sync folder from source repo
+description: Sync /sync from jonorgdev/jon-source-repo@main into this repository.
 on:
   schedule: daily
 permissions: read-all
@@ -17,6 +17,11 @@ steps:
     env:
       GH_TOKEN: ${{ steps.generate-token.outputs.token }}
     run: echo "GH_TOKEN=$GH_TOKEN" >> $GITHUB_ENV
+  - name: Verify app access to source repo
+    env:
+      GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+    run: |
+      gh api /repos/jonorgdev/jon-source-repo --jq .full_name >/dev/null
 network:
   allowed:
     - "github.com"
@@ -33,10 +38,22 @@ safe-outputs:
 
 Sync the entire /sync folder (including all files and subfolders) from jonorgdev/jon-source-repo@main into the /sync folder of the repository where this workflow resides. This merges upstream files into the local /sync folder (no deletions of local-only files) and opens a pull request with the changes.
 
+## Required setup
+
+1) Create or use a GitHub App in the jonorgdev organization.
+2) Generate at least one private key for that App.
+3) Install the App on jonorgdev/jon-source-repo.
+4) Grant repository permission `Contents: Read` to the App.
+5) In each target repository (where this workflow runs), set:
+  - Repository variable `SOURCE_REPO_SYNC_APP_ID` = your GitHub App ID.
+  - Repository secret `SOURCE_REPO_SYNC_APP_PRIVATE_KEY` = full PEM private key content (including BEGIN/END lines).
+
+If any setup item is missing, token generation will fail with errors like `Not Found`, `Integration must generate a public key`, or `Invalid keyData`.
+
 ## Steps
 
 
-1) Use bash to clone jonorgdev/jon-source-repo@main with sparse-checkout for the /sync folder using the GH app token (in `GH_TOKEN`).
+1) Use bash to clone jonorgdev/jon-source-repo@main with sparse-checkout for the /sync folder using the GitHub App token (in `GH_TOKEN`).
 2) Merge the remote /sync folder into ./sync in this repository (do not delete local-only files).
 3) Check `git status` for changes. If there are changes, use the `create_pull_request` safe output tool to open a PR. Do **NOT** try to `git push` yourself — the safe-outputs job handles pushing and PR creation automatically.
 

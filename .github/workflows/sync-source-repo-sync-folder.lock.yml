@@ -21,11 +21,11 @@
 #
 # For more information: https://github.github.com/gh-aw/introduction/overview/
 #
-# Sync /sync and /target-folder from jonorgdev/jon-source-repo@main into this repository.
+# Sync /sync from jonorgdev/jon-source-repo@main into this repository.
 #
-# gh-aw-metadata: {"schema_version":"v1","frontmatter_hash":"a387a442bdcf3dbfd0db667af9f00d3d87b261e403c7d88cc64b6aa94f3744d4","compiler_version":"v0.49.7"}
+# gh-aw-metadata: {"schema_version":"v1","frontmatter_hash":"c3d3eaeeb34ca0bad96b5047b1b13b1ff96e54231d961e5d43f19fcabdc919ce","compiler_version":"v0.49.7"}
 
-name: "Sync /sync and /target-folder"
+name: "Sync /sync folder from source repo"
 "on":
   schedule:
   - cron: "31 6 * * *"
@@ -37,7 +37,7 @@ permissions: {}
 concurrency:
   group: "gh-aw-${{ github.workflow }}"
 
-run-name: "Sync /sync and /target-folder"
+run-name: "Sync /sync folder from source repo"
 
 jobs:
   activation:
@@ -248,6 +248,10 @@ jobs:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
         name: Export GH_TOKEN
         run: echo "GH_TOKEN=$GH_TOKEN" >> $GITHUB_ENV
+      - env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+        name: Verify app access to source repo
+        run: gh api /repos/jonorgdev/jon-source-repo --jq .full_name >/dev/null
 
       - name: Configure Git credentials
         env:
@@ -288,7 +292,7 @@ jobs:
               version: "",
               agent_version: "0.0.414",
               cli_version: "v0.49.7",
-              workflow_name: "Sync /sync and /target-folder",
+              workflow_name: "Sync /sync folder from source repo",
               experimental: false,
               supports_tools_allowlist: true,
               run_id: context.runId,
@@ -860,7 +864,7 @@ jobs:
         env:
           GH_AW_AGENT_OUTPUT: ${{ env.GH_AW_AGENT_OUTPUT }}
           GH_AW_NOOP_MAX: "1"
-          GH_AW_WORKFLOW_NAME: "Sync /sync and /target-folder"
+          GH_AW_WORKFLOW_NAME: "Sync /sync folder from source repo"
         with:
           github-token: ${{ secrets.GH_AW_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
           script: |
@@ -873,7 +877,7 @@ jobs:
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
         env:
           GH_AW_AGENT_OUTPUT: ${{ env.GH_AW_AGENT_OUTPUT }}
-          GH_AW_WORKFLOW_NAME: "Sync /sync and /target-folder"
+          GH_AW_WORKFLOW_NAME: "Sync /sync folder from source repo"
         with:
           github-token: ${{ secrets.GH_AW_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
           script: |
@@ -886,7 +890,7 @@ jobs:
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
         env:
           GH_AW_AGENT_OUTPUT: ${{ env.GH_AW_AGENT_OUTPUT }}
-          GH_AW_WORKFLOW_NAME: "Sync /sync and /target-folder"
+          GH_AW_WORKFLOW_NAME: "Sync /sync folder from source repo"
           GH_AW_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           GH_AW_AGENT_CONCLUSION: ${{ needs.agent.result }}
           GH_AW_WORKFLOW_ID: "sync-source-repo-sync-folder"
@@ -907,7 +911,7 @@ jobs:
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
         env:
           GH_AW_AGENT_OUTPUT: ${{ env.GH_AW_AGENT_OUTPUT }}
-          GH_AW_WORKFLOW_NAME: "Sync /sync and /target-folder"
+          GH_AW_WORKFLOW_NAME: "Sync /sync folder from source repo"
           GH_AW_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           GH_AW_AGENT_CONCLUSION: ${{ needs.agent.result }}
           GH_AW_NOOP_MESSAGE: ${{ steps.noop.outputs.noop_message }}
@@ -924,7 +928,7 @@ jobs:
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
         env:
           GH_AW_AGENT_OUTPUT: ${{ env.GH_AW_AGENT_OUTPUT }}
-          GH_AW_WORKFLOW_NAME: "Sync /sync and /target-folder"
+          GH_AW_WORKFLOW_NAME: "Sync /sync folder from source repo"
           GH_AW_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         with:
           github-token: ${{ secrets.GH_AW_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
@@ -969,8 +973,8 @@ jobs:
       - name: Setup threat detection
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
         env:
-          WORKFLOW_NAME: "Sync /sync and /target-folder"
-          WORKFLOW_DESCRIPTION: "Sync /sync and /target-folder from jonorgdev/jon-source-repo@main into this repository."
+          WORKFLOW_NAME: "Sync /sync folder from source repo"
+          WORKFLOW_DESCRIPTION: "Sync /sync from jonorgdev/jon-source-repo@main into this repository."
           HAS_PATCH: ${{ needs.agent.outputs.has_patch }}
         with:
           script: |
@@ -1051,7 +1055,7 @@ jobs:
       GH_AW_CI_TRIGGER_TOKEN: ${{ secrets.GH_AW_CI_TRIGGER_TOKEN }}
       GH_AW_ENGINE_ID: "copilot"
       GH_AW_WORKFLOW_ID: "sync-source-repo-sync-folder"
-      GH_AW_WORKFLOW_NAME: "Sync /sync and /target-folder"
+      GH_AW_WORKFLOW_NAME: "Sync /sync folder from source repo"
     outputs:
       code_push_failure_count: ${{ steps.process_safe_outputs.outputs.code_push_failure_count }}
       code_push_failure_errors: ${{ steps.process_safe_outputs.outputs.code_push_failure_errors }}
