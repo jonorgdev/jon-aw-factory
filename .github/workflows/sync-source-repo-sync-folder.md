@@ -4,6 +4,7 @@ description: Sync /sync from jonorgdev/jon-source-repo@main into this repository
 on:
   schedule: daily
 permissions: read-all
+engine: copilot
 steps:
   - name: Generate a token
     id: generate-token
