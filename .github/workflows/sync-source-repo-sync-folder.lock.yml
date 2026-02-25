@@ -23,7 +23,7 @@
 #
 # Sync /sync from jonorgdev/jon-source-repo@main into this repository.
 #
-# gh-aw-metadata: {"schema_version":"v1","frontmatter_hash":"c3d3eaeeb34ca0bad96b5047b1b13b1ff96e54231d961e5d43f19fcabdc919ce","compiler_version":"v0.49.7"}
+# gh-aw-metadata: {"schema_version":"v1","frontmatter_hash":"7ce9b20a0b31d08705fa52ed292619c6336cbd74468f6ebf4b91cbe57eaff755","compiler_version":"v0.49.7"}
 
 name: "Sync /sync folder from source repo"
 "on":

@@ -4,6 +4,7 @@ description: Sync /sync from jonorgdev/jon-source-repo@main into this repository
 on:
   schedule: daily
 permissions: read-all
+engine: copilot
 steps:
   - name: Generate a token
     id: generate-token
@@ -47,8 +48,9 @@ Sync the entire /sync folder (including all files and subfolders) from jonorgdev
 5) In each target repository (where this workflow runs), set:
   - Repository variable `SOURCE_REPO_SYNC_APP_ID` = your GitHub App ID.
   - Repository secret `SOURCE_REPO_SYNC_APP_PRIVATE_KEY` = full PEM private key content (including BEGIN/END lines).
+  - Repository secret `COPILOT_GITHUB_TOKEN` = fine-grained PAT with `Copilot Requests` permission.
 
-If any setup item is missing, token generation will fail with errors like `Not Found`, `Integration must generate a public key`, or `Invalid keyData`.
+If any setup item is missing, runs can fail with errors like `None of the following secrets are set: COPILOT_GITHUB_TOKEN`, `Not Found`, `Integration must generate a public key`, or `Invalid keyData`.
 
 ## Steps
 
